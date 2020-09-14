@@ -93,7 +93,7 @@ public class DataSetMarshaller {
     static DataSet toDataSet(RoutingProblem routingProblem) {
         DataSet dataSet = new DataSet();
         dataSet.setName(routingProblem.name());
-        dataSet.setDepot(routingProblem.depot().map(DataSetMarshaller::toDataSet).orElse(null));
+        dataSet.setDepot(routingProblem.origin().map(DataSetMarshaller::toDataSet).orElse(null));
         dataSet.setVehicles(routingProblem.vehicles().stream()
                 .map(DataSetMarshaller::toDataSet)
                 .collect(Collectors.toList())
@@ -121,6 +121,7 @@ public class DataSetMarshaller {
         return new RoutingProblem(
                 Optional.ofNullable(dataSet.getName()).orElse(""),
                 dataSet.getVehicles().stream().map(DataSetMarshaller::toDomain).collect(Collectors.toList()),
+                Optional.ofNullable(dataSet.getDepot()).map(DataSetMarshaller::toDomain).orElse(null),
                 Optional.ofNullable(dataSet.getDepot()).map(DataSetMarshaller::toDomain).orElse(null),
                 dataSet.getVisits().stream().map(DataSetMarshaller::toDomain).collect(Collectors.toList())
         );

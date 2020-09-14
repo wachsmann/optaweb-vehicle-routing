@@ -41,9 +41,13 @@ public class ShallowRoute {
      */
     public final long vehicleId;
     /**
-     * Depot ID.
+     * Origin ID.
      */
-    public final long depotId;
+    public final long originId;
+    /**
+     * Destiny ID.
+     */
+    public final long destinyId;
     /**
      * Visit IDs (immutable, never {@code null}).
      */
@@ -52,18 +56,20 @@ public class ShallowRoute {
     /**
      * Create shallow route.
      * @param vehicleId vehicle ID
-     * @param depotId depot ID
+     * @param originId depot ID
+     * @param destinyId depot ID
      * @param visitIds visit IDs
      */
-    public ShallowRoute(long vehicleId, long depotId, List<Long> visitIds) {
+    public ShallowRoute(long vehicleId, long originId,long destinyId, List<Long> visitIds) {
         this.vehicleId = vehicleId;
-        this.depotId = depotId;
+        this.originId = originId;
+        this.destinyId = destinyId;
         this.visitIds = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(visitIds)));
     }
 
     @Override
     public String toString() {
-        String route = Stream.concat(Stream.of(depotId), visitIds.stream())
+        String route = Stream.concat(Stream.of(originId), visitIds.stream())
                 .map(Object::toString)
                 .collect(Collectors.joining("->", "[", "]"));
         return vehicleId + ": " + route;

@@ -32,7 +32,8 @@ public class RouteChangedEvent extends ApplicationEvent {
 
     private final Distance distance;
     private final List<Long> vehicleIds;
-    private final Long depotId;
+    private final Long originId;
+    private final Long destinyId;
     private final List<Long> visitIds;
     private final Collection<ShallowRoute> routes;
 
@@ -41,7 +42,7 @@ public class RouteChangedEvent extends ApplicationEvent {
      * @param source the object on which the event initially occurred (never {@code null})
      * @param distance total distance of all vehicle routes
      * @param vehicleIds vehicle IDs
-     * @param depotId depot ID (may be {@code null} if there are no locations)
+     * @param originId origin ID (may be {@code null} if there are no locations)
      * @param visitIds IDs of visits
      * @param routes vehicle routes
      */
@@ -49,14 +50,16 @@ public class RouteChangedEvent extends ApplicationEvent {
             Object source,
             Distance distance,
             List<Long> vehicleIds,
-            Long depotId,
+            Long originId,
+            Long destinyId,
             List<Long> visitIds,
             Collection<ShallowRoute> routes
     ) {
         super(source);
         this.distance = Objects.requireNonNull(distance);
         this.vehicleIds = Objects.requireNonNull(vehicleIds);
-        this.depotId = depotId; // may be null (no depot)
+        this.originId = originId; // may be null (no origin)
+        this.destinyId = destinyId; // may be null (no origin)
         this.visitIds = Objects.requireNonNull(visitIds);
         this.routes = Objects.requireNonNull(routes);
     }
@@ -86,13 +89,19 @@ public class RouteChangedEvent extends ApplicationEvent {
     }
 
     /**
-     * The depot ID.
-     * @return depot ID
+     * The origin ID.
+     * @return origin ID
      */
-    public Optional<Long> depotId() {
-        return Optional.ofNullable(depotId);
+    public Optional<Long> originId() {
+        return Optional.ofNullable(originId);
     }
-
+    /**
+     * The destiny ID.
+     * @return origin ID
+     */
+    public Optional<Long> destinyId() {
+        return Optional.ofNullable(destinyId);
+    }
     public List<Long> visitIds() {
         return visitIds;
     }

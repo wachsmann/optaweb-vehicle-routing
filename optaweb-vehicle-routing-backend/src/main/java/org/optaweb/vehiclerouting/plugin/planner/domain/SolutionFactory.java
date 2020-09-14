@@ -58,22 +58,31 @@ public class SolutionFactory {
      */
     public static VehicleRoutingSolution solutionFromVisits(
             List<PlanningVehicle> vehicles,
-            PlanningDepot depot,
-            List<PlanningVisit> visits
+            PlanningDepot origin,
+            List<PlanningVisit> visits,
+            PlanningDepot destiny
     ) {
         VehicleRoutingSolution solution = new VehicleRoutingSolution();
         solution.setVehicleList(new ArrayList<>(vehicles));
-        solution.setDepotList(new ArrayList<>(1));
-        if (depot != null) {
-            solution.getDepotList().add(depot);
-            moveAllVehiclesToDepot(vehicles, depot);
+        solution.setDepotList(new ArrayList<>(2));
+        if (origin != null ) {
+            solution.getDepotList().add(origin);
+            
+
+            moveAllVehiclesToDepot(vehicles, origin);
+        }
+        if (destiny != null) {
+           
+            solution.getDepotList().add(destiny);
+
+           
         }
         solution.setVisitList(new ArrayList<>(visits));
         solution.setScore(HardSoftLongScore.ZERO);
         return solution;
     }
 
-    private static void moveAllVehiclesToDepot(List<PlanningVehicle> vehicles, PlanningDepot depot) {
-        vehicles.forEach(vehicle -> vehicle.setDepot(depot));
+    private static void moveAllVehiclesToDepot(List<PlanningVehicle> vehicles, PlanningDepot origin) {
+        vehicles.forEach(vehicle -> vehicle.setOrigin(origin));
     }
 }

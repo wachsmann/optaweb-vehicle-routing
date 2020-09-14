@@ -26,7 +26,8 @@ public class PlanningVehicle implements Standstill {
     @PlanningId
     private long id;
     private int capacity;
-    private PlanningDepot depot;
+    private PlanningDepot origin;
+    private PlanningDepot destiny;
 
     // Shadow variables
     private PlanningVisit nextVisit;
@@ -44,19 +45,27 @@ public class PlanningVehicle implements Standstill {
     }
 
     public int getCapacity() {
-        return capacity;
+        return capacity;   
     }
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
-    public PlanningDepot getDepot() {
-        return depot;
+    
+    public PlanningDepot getOrigin() {
+        return origin;
     }
 
-    public void setDepot(PlanningDepot depot) {
-        this.depot = depot;
+    public void setOrigin(PlanningDepot origin) {
+        this.origin = origin;
+    }
+    public PlanningDepot getDestiny() {
+        return destiny;
+    }
+
+    public void setDestiny(PlanningDepot destiny) {
+        this.destiny = destiny;
     }
 
     @Override
@@ -92,14 +101,15 @@ public class PlanningVehicle implements Standstill {
 
     @Override
     public PlanningLocation getLocation() {
-        return depot.getLocation();
+        
+        return origin.getLocation();
     }
 
     @Override
     public String toString() {
         return "PlanningVehicle{" +
                 "capacity=" + capacity +
-                (depot == null ? "" : ",depot=" + depot.getId()) +
+                (origin == null ? "" : ",origin=" + origin.getId()) +
                 (nextVisit == null ? "" : ",nextVisit=" + nextVisit.getId()) +
                 ",id=" + id +
                 '}';

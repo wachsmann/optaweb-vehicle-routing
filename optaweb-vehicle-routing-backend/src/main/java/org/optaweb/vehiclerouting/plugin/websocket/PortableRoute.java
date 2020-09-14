@@ -28,19 +28,22 @@ import org.optaweb.vehiclerouting.domain.Route;
 class PortableRoute {
 
     private final PortableVehicle vehicle;
-    private final PortableLocation depot;
+    private final PortableLocation origin;
+    private final PortableLocation destiny;
     private final List<PortableLocation> visits;
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private final List<List<PortableCoordinates>> track;
 
     PortableRoute(
             PortableVehicle vehicle,
-            PortableLocation depot,
+            PortableLocation origin,
+            PortableLocation destiny,
             List<PortableLocation> visits,
             List<List<PortableCoordinates>> track
     ) {
         this.vehicle = Objects.requireNonNull(vehicle);
-        this.depot = Objects.requireNonNull(depot);
+        this.origin = Objects.requireNonNull(origin);
+        this.destiny = Objects.requireNonNull(destiny);
         this.visits = Objects.requireNonNull(visits);
         this.track = Objects.requireNonNull(track);
     }
@@ -49,10 +52,12 @@ class PortableRoute {
         return vehicle;
     }
 
-    public PortableLocation getDepot() {
-        return depot;
+    public PortableLocation getOrigin() {
+        return origin;
     }
-
+    public PortableLocation getDestiny() {
+        return destiny;
+    }
     public List<PortableLocation> getVisits() {
         return visits;
     }

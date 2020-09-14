@@ -354,7 +354,7 @@ function interactive() {
 }
 
 function quickstart() {
-  local url=http://download.geofabrik.de/europe/belgium-latest.osm.pbf
+  local url=http://download.geofabrik.de/europe/sul-latest.osm.pbf
   osm_file="belgium-latest.osm.pbf"
   cc_list="BE"
   local -r osm_target=${osm_dir}/${osm_file}

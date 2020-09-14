@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Vehicle's itinerary (sequence of visits) and its depot. This entity cannot exist without the vehicle and the depot
+ * Vehicle's itinerary (sequence of visits) and its origin. This entity cannot exist without the vehicle and the origin
  * but it's allowed to have no visits when the vehicle hasn't been assigned any (it's idle).
  * <p>
  * This entity describes part of a {@link RoutingPlan solution} of the vehicle routing problem
@@ -34,24 +34,29 @@ import java.util.stream.Collectors;
 public class Route {
 
     private final Vehicle vehicle;
-    private final Location depot;
+    
+    private final Location origin;
+    private final Location destiny;
     private final List<Location> visits;
 
     /**
      * Create a vehicle route.
      * @param vehicle the vehicle assigned to this route (not {@code null})
-     * @param depot vehicle's depot (not {@code null})
+     * @param origin vehicle's origin (not {@code null})
      * @param visits list of visits (not {@code null})
      */
-    public Route(Vehicle vehicle, Location depot, List<Location> visits) {
+    public Route(Vehicle vehicle, Location origin, Location destiny, List<Location> visits) {
         this.vehicle = Objects.requireNonNull(vehicle);
-        this.depot = Objects.requireNonNull(depot);
+        
+        this.origin = Objects.requireNonNull(origin);
+        this.destiny = Objects.requireNonNull(destiny);
         this.visits = new ArrayList<>(Objects.requireNonNull(visits));
-        // TODO Probably remove this check when we have more types: new Route(Depot depot, List<Visit> visits).
-        //      Then visits obviously cannot contain the depot. But will we still require that no visit has the same
-        //      location as the depot? (I don't think so).
-        if (visits.contains(depot)) {
-            throw new IllegalArgumentException("Depot (" + depot + ") must not be one of the visits (" + visits + ")");
+        // TODO Probably remove this check when we have more types: new Route(origin origin, List<Visit> visits).
+        //      Then visits obviously cannot contain the origin. But will we still require that no visit has the same
+        //      location as the origin? (I don't think so).
+        
+        if (visits.contains(origin)) {
+            throw new IllegalArgumentException("origin (" + origin + ") must not be one of the visits (" + visits + ")");
         }
         long uniqueVisits = visits.stream().distinct().count();
         if (uniqueVisits < visits.size()) {
@@ -69,15 +74,22 @@ public class Route {
     }
 
     /**
-     * Depot in which the route starts and ends.
-     * @return route's depot (never {@code null})
+     * origin in which the route starts and ends.
+     * @return route's origin (never {@code null})
      */
-    public Location depot() {
-        return depot;
+    public Location origin() {
+        return origin;
     }
 
     /**
-     * List of vehicle's visits (not including the depot).
+     * origin in which the route ends
+     * @return
+     */
+    public Location destiny(){
+        return destiny;
+    }
+    /**
+     * List of vehicle's visits (not including the origin).
      * @return list of visits
      */
     public List<Location> visits() {
@@ -88,7 +100,8 @@ public class Route {
     public String toString() {
         return "Route{" +
                 "vehicle=" + vehicle +
-                ", depot=" + depot.id() +
+                ", origin=" + origin.id() +
+                ", destiny=" + destiny.id() +
                 ", visits=" + visits.stream().map(Location::id).collect(Collectors.toList()) +
                 '}';
     }

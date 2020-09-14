@@ -38,7 +38,9 @@ public class RoutingPlan {
 
     private final Distance distance;
     private final List<Vehicle> vehicles;
-    private final Location depot;
+    
+    private final Location origin;
+    private final Location destiny;
     private final List<Location> visits;
     private final List<RouteWithTrack> routes;
 
@@ -46,25 +48,29 @@ public class RoutingPlan {
      * Create a routing plan.
      * @param distance the overall travel distance
      * @param vehicles all available vehicles
-     * @param depot the depot (may be {@code null})
+    
+     * @param origin the start origin (may be {@code null})
+     * @param destiny the end origin (may be {@code null})
      * @param visits all visits
      * @param routes routes of all vehicles
      */
     public RoutingPlan(
             Distance distance,
             List<Vehicle> vehicles,
-            Location depot,
+            Location origin,
+            Location destiny,
             List<Location> visits,
             List<RouteWithTrack> routes
     ) {
         this.distance = Objects.requireNonNull(distance);
         this.vehicles = new ArrayList<>(Objects.requireNonNull(vehicles));
-        this.depot = depot;
+        this.origin = origin;
+        this.destiny = destiny;
         this.visits = new ArrayList<>(Objects.requireNonNull(visits));
         this.routes = new ArrayList<>(Objects.requireNonNull(routes));
-        if (depot == null) {
+        if ((origin == null /*|| origin == null || destiny == null */)) {
             if (!routes.isEmpty()) {
-                throw new IllegalArgumentException("Routes must be empty when depot is null");
+                throw new IllegalArgumentException("Routes must be empty when origin is null");
             }
         } else if (routes.size() != vehicles.size()) {
             throw new IllegalArgumentException(describeVehiclesRoutesInconsistency(
@@ -119,7 +125,7 @@ public class RoutingPlan {
      * @return empty routing plan
      */
     public static RoutingPlan empty() {
-        return new RoutingPlan(Distance.ZERO, emptyList(), null, emptyList(), emptyList());
+        return new RoutingPlan(Distance.ZERO, emptyList(), null,null, emptyList(), emptyList());
     }
 
     /**
@@ -139,8 +145,8 @@ public class RoutingPlan {
     }
 
     /**
-     * Routes of all vehicles in the depot. Includes empty routes of vehicles that stay in the depot.
-     * @return all routes (may be empty when there is no depot or no vehicles)
+     * Routes of all vehicles in the origin. Includes empty routes of vehicles that stay in the origin.
+     * @return all routes (may be empty when there is no origin or no vehicles)
      */
     public List<RouteWithTrack> routes() {
         return Collections.unmodifiableList(routes);
@@ -155,19 +161,25 @@ public class RoutingPlan {
     }
 
     /**
-     * The depot.
-     * @return depot (may be missing)
+     * The origin.
+     * @return origin (may be missing)
      */
-    public Optional<Location> depot() {
-        return Optional.ofNullable(depot);
+    public Optional<Location> origin() {
+        return Optional.ofNullable(origin);
     }
-
     /**
-     * Routing plan is empty when there is no depot, no vehicles and no routes.
+     * The destiny.
+     * @return destiny (may be missing)
+     */
+    public Optional<Location> destiny() {
+        return Optional.ofNullable(destiny);
+    }
+    /**
+     * Routing plan is empty when there is no origin, no vehicles and no routes.
      * @return {@code true} if the plan is empty
      */
     public boolean isEmpty() {
-        // No need to check routes. No depot => no routes.
-        return depot == null && vehicles.isEmpty();
+        // No need to check routes. No origin => no routes.
+        return (origin == null /*|| origin == null || destiny == null*/)  && vehicles.isEmpty();
     }
 }

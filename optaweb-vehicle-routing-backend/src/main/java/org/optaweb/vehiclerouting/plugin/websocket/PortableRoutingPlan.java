@@ -27,21 +27,24 @@ class PortableRoutingPlan {
 
     private final PortableDistance distance;
     private final List<PortableVehicle> vehicles;
-    private final PortableLocation depot;
+    private final PortableLocation origin;
+    private final PortableLocation destiny;
     private final List<PortableLocation> visits;
     private final List<PortableRoute> routes;
 
     PortableRoutingPlan(
             PortableDistance distance,
             List<PortableVehicle> vehicles,
-            PortableLocation depot,
+            PortableLocation origin,
+            PortableLocation destiny,
             List<PortableLocation> visits,
             List<PortableRoute> routes
     ) {
         // TODO require non-null
         this.distance = distance;
         this.vehicles = vehicles;
-        this.depot = depot;
+        this.origin = origin;
+        this.destiny = destiny;
         this.visits = visits;
         this.routes = routes;
     }
@@ -54,10 +57,13 @@ class PortableRoutingPlan {
         return vehicles;
     }
 
-    public PortableLocation getDepot() {
-        return depot;
+    public PortableLocation getOrigin() {
+        return origin;
     }
-
+    
+    public PortableLocation getDestiny() {
+        return destiny;
+    }
     public List<PortableLocation> getVisits() {
         return visits;
     }

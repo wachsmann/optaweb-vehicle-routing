@@ -36,7 +36,7 @@ public class RouteWithTrack extends Route {
      * @param track track going through all visits (not {@code null})
      */
     public RouteWithTrack(Route route, List<List<Coordinates>> track) {
-        super(route.vehicle(), route.depot(), route.visits());
+        super(route.vehicle(),route.origin(),route.destiny(),route.visits());
         this.track = new ArrayList<>(Objects.requireNonNull(track));
         if (route.visits().isEmpty() && !track.isEmpty() || !route.visits().isEmpty() && track.isEmpty()) {
             throw new IllegalArgumentException("Route and track must be either both empty or both non-empty");
@@ -44,7 +44,7 @@ public class RouteWithTrack extends Route {
     }
 
     /**
-     * Vehicle's track that goes from vehicle's depot through all visits and returns to the depot.
+     * Vehicle's track that goes from vehicle's origin through all visits and returns to the origin.
      * @return vehicle's track (not {@code null})
      */
     public List<List<Coordinates>> track() {

@@ -64,6 +64,10 @@ class RouteChangedEventPublisher {
                 event.distance(),
                 solution.getScore()
         );
+        for (PlanningVehicle vehicle : solution.getVehicleList()) {
+
+           logger.info(vehicle.toString()); 
+        }
         logger.debug("Routes: {}", event.routes());
         eventPublisher.publishEvent(event);
     }
@@ -81,7 +85,8 @@ class RouteChangedEventPublisher {
                 // Turn negative soft score into a positive amount of time.
                 Distance.ofMillis(-solution.getScore().getSoftScore()),
                 vehicleIds(solution),
-                depotId(solution),
+                originId(solution),
+                destinyId(solution),
                 visitIds(solution),
                 routes
         );
@@ -94,7 +99,7 @@ class RouteChangedEventPublisher {
     }
 
     /**
-     * Extract routes from the solution. Includes empty routes of vehicles that stay in the depot.
+     * Extract routes from the solution. Includes empty routes of vehicles that stay in the origin.
      * @param solution solution
      * @return one route per vehicle
      */
@@ -105,10 +110,16 @@ class RouteChangedEventPublisher {
         }
         ArrayList<ShallowRoute> routes = new ArrayList<>();
         for (PlanningVehicle vehicle : solution.getVehicleList()) {
-            PlanningDepot depot = vehicle.getDepot();
-            if (depot == null) {
+            PlanningDepot origin = vehicle.getOrigin();
+            if (origin == null) {
                 throw new IllegalArgumentException(
-                        "Vehicle (id=" + vehicle.getId() + ") is not in the depot. That's not allowed"
+                        "Vehicle (id=" + vehicle.getId() + ") don't have a origin. That's not allowed"
+                );
+            }
+            PlanningDepot destiny = vehicle.getDestiny();
+            if (destiny == null) {
+                throw new IllegalArgumentException(
+                        "Vehicle (id=" + vehicle.getId() + ") don't have a destiny. That's not allowed"
                 );
             }
             List<Long> visits = new ArrayList<>();
@@ -118,7 +129,7 @@ class RouteChangedEventPublisher {
                 }
                 visits.add(visit.getLocation().getId());
             }
-            routes.add(new ShallowRoute(vehicle.getId(), depot.getId(), visits));
+            routes.add(new ShallowRoute(vehicle.getId(), origin.getId(),destiny.getId(), visits));
         }
         return routes;
     }
@@ -135,11 +146,20 @@ class RouteChangedEventPublisher {
     }
 
     /**
-     * Get solution's depot ID.
-     * @param solution the solution in which to look for the depot
-     * @return first depot ID from the solution or {@code null} if there are no depots
+     * Get solution's origin ID.
+     * @param solution the solution in which to look for the origin
+     * @return first origin ID from the solution or {@code null} if there are no origins
      */
-    private static Long depotId(VehicleRoutingSolution solution) {
+    private static Long originId(VehicleRoutingSolution solution) {
         return solution.getDepotList().isEmpty() ? null : solution.getDepotList().get(0).getId();
+    }
+
+    /**
+     * Get solution's origin ID.
+     * @param solution the solution in which to look for the origin
+     * @return first origin ID from the solution or {@code null} if there are no origins
+     */
+    private static Long destinyId(VehicleRoutingSolution solution) {
+        return solution.getDepotList().isEmpty() ? null : solution.getDepotList().get(solution.getDepotList().size() - 1).getId();
     }
 }

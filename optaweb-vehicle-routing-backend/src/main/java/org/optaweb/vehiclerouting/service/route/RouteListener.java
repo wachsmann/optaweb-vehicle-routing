@@ -73,7 +73,8 @@ public class RouteListener implements ApplicationListener<RouteChangedEvent> {
     @Override
     public void onApplicationEvent(RouteChangedEvent event) {
         // TODO persist the best solution
-        Location depot = event.depotId().flatMap(locationRepository::find).orElse(null);
+        Location origin = event.originId().flatMap(locationRepository::find).orElse(null);
+        Location destiny = event.destinyId().flatMap(locationRepository::find).orElse(null);
         try {
             // TODO Introduce problem revision (every modification increases revision number, event will only
             //  be published if revision numbers match) to avoid looking for missing/extra vehicles/visits.
@@ -87,18 +88,20 @@ public class RouteListener implements ApplicationListener<RouteChangedEvent> {
                     // list of deep locations
                     .map(shallowRoute -> new Route(
                             vehicleMap.get(shallowRoute.vehicleId),
-                            findLocationById(shallowRoute.depotId),
+                            findLocationById(shallowRoute.originId),
+                            findLocationById(shallowRoute.destinyId),
                             shallowRoute.visitIds.stream()
                                     .map(visitMap::get)
                                     .collect(Collectors.toList())
                     ))
                     // add tracks
-                    .map(route -> new RouteWithTrack(route, track(route.depot(), route.visits())))
+                    .map(route -> new RouteWithTrack(route, track(route.origin(),route.destiny(), route.visits())))
                     .collect(Collectors.toList());
             bestRoutingPlan = new RoutingPlan(
                     event.distance(),
                     new ArrayList<>(vehicleMap.values()),
-                    depot,
+                    origin,
+                    destiny,
                     new ArrayList<>(visitMap.values()),
                     routes
             );
@@ -120,14 +123,14 @@ public class RouteListener implements ApplicationListener<RouteChangedEvent> {
         );
     }
 
-    private List<List<Coordinates>> track(Location depot, List<Location> route) {
+    private List<List<Coordinates>> track(Location origin,Location destiny, List<Location> route) {
         if (route.isEmpty()) {
             return Collections.emptyList();
         }
         ArrayList<Location> itinerary = new ArrayList<>();
-        itinerary.add(depot);
+        itinerary.add(origin);
         itinerary.addAll(route);
-        itinerary.add(depot);
+        itinerary.add(destiny);
         List<List<Coordinates>> paths = new ArrayList<>();
         for (int i = 0; i < itinerary.size() - 1; i++) {
             Location fromLocation = itinerary.get(i);
