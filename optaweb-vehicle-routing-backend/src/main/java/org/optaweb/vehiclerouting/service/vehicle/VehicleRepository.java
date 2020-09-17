@@ -19,8 +19,10 @@ package org.optaweb.vehiclerouting.service.vehicle;
 import java.util.List;
 import java.util.Optional;
 
+import org.optaweb.vehiclerouting.domain.Planner;
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 
 /**
  * Defines repository operations on vehicles.
@@ -32,7 +34,7 @@ public interface VehicleRepository {
      * @param capacity vehicle's capacity
      * @return a new vehicle
      */
-    Vehicle createVehicle(int capacity);
+    Vehicle createVehicle(int capacity,PlannerEntity planner);
 
     /**
      * Create a vehicle from the given data.

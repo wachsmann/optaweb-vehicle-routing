@@ -23,6 +23,7 @@ export interface LatLng {
 
 export interface LatLngWithDescription extends LatLng {
   description: string;
+  plannerId:number
 }
 
 export interface Location extends LatLng {

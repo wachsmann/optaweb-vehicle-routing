@@ -41,7 +41,7 @@ public class DemoService {
 
     static final int MAX_TRIES = 10;
 
-    private final RoutingProblemList routingProblems;
+    //private final RoutingProblemList routingProblems;
     private final LocationService locationService;
     private final LocationRepository locationRepository;
     private final VehicleService vehicleService;
@@ -50,25 +50,26 @@ public class DemoService {
 
     @Autowired
     public DemoService(
-            RoutingProblemList routingProblems,
+            //RoutingProblemList routingProblems,
             LocationService locationService,
             LocationRepository locationRepository,
             VehicleService vehicleService,
             VehicleRepository vehicleRepository,
             DataSetMarshaller dataSetMarshaller
     ) {
-        this.routingProblems = routingProblems;
+        //this.routingProblems = routingProblems;
         this.locationService = locationService;
         this.locationRepository = locationRepository;
         this.vehicleService = vehicleService;
         this.vehicleRepository = vehicleRepository;
         this.dataSetMarshaller = dataSetMarshaller;
     }
-
+    /*
     public Collection<RoutingProblem> demos() {
         return routingProblems.all();
     }
-
+    */
+    /*
     @Async
     public void loadDemo(String name) {
         RoutingProblem routingProblem = routingProblems.byName(name);
@@ -79,10 +80,10 @@ public class DemoService {
         routingProblem.visits().forEach(visit -> addWithRetry(visit.coordinates(), visit.description()));
         routingProblem.vehicles().forEach(vehicleService::createVehicle);
     }
-
+*/
     private void addWithRetry(Coordinates coordinates, String description) {
         int tries = 0;
-        while (tries < MAX_TRIES && !locationService.createLocation(coordinates, description)) {
+        while (tries < MAX_TRIES && !locationService.createLocation(coordinates, description,0)) {
             tries++;
         }
         if (tries == MAX_TRIES) {

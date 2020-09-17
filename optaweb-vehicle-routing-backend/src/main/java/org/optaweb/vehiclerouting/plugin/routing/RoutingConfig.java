@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 import com.graphhopper.reader.osm.GraphHopperOSM;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoderFactory;
-import org.optaweb.vehiclerouting.Profiles;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ class RoutingConfig {
      * Avoids creating real GraphHopper instance when running a @SpringBootTest.
      * @return real GraphHopper
      */
-    @Profile(Profiles.NOT_TEST)
+    
     @Bean
     @ConditionalOnProperty(prefix = "app.routing", name = "engine", havingValue = "graphhopper", matchIfMissing = true)
     GraphHopperOSM graphHopper() {

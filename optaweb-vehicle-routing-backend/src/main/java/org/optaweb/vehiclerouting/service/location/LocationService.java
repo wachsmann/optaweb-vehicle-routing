@@ -22,6 +22,9 @@ import java.util.Optional;
 
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Location;
+import org.optaweb.vehiclerouting.domain.Planner;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerCrudRepository;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 import org.optaweb.vehiclerouting.service.error.ErrorEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +43,12 @@ public class LocationService {
     private static final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
     private final LocationRepository repository;
+    
     private final RouteOptimizer optimizer; // TODO move to RoutingPlanService (SRP)
     private final DistanceMatrix distanceMatrix;
     private final ApplicationEventPublisher eventPublisher;
-
+	@Autowired
+    private PlannerCrudRepository plannerRepository;
     @Autowired
     LocationService(
             LocationRepository repository,
@@ -57,11 +62,18 @@ public class LocationService {
         this.eventPublisher = eventPublisher;
     }
 
-    public synchronized boolean createLocation(Coordinates coordinates, String description) {
+    public synchronized boolean createLocation(Coordinates coordinates, String description,long plannerId) {
+        final Optional<PlannerEntity> optionalPlannerEntity = plannerRepository.findById(plannerId);
+        final PlannerEntity plannerEntity = optionalPlannerEntity.orElseThrow(
+                () -> new IllegalArgumentException("Planner{id=" + plannerId + "} doesn't exist")
+        );
+        logger.info(plannerEntity.toString());
         Objects.requireNonNull(coordinates);
         Objects.requireNonNull(description);
+        Objects.requireNonNull(plannerId);
+        
         // TODO if (router.isLocationAvailable(coordinates))
-        return submitToPlanner(repository.createLocation(coordinates, description));
+        return submitToPlanner(repository.createLocation(coordinates,description,plannerEntity));
     }
 
     public synchronized boolean addLocation(Location location) {

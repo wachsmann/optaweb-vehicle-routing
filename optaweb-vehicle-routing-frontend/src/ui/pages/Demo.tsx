@@ -121,7 +121,7 @@ export class Demo extends React.Component<DemoProps, DemoState> {
   }
 
   handleSearchResultClick(result: Result) {
-    this.props.addLocationHandler({ ...result.latLng, description: result.address });
+    this.props.addLocationHandler({ ...result.latLng, description: result.address,plannerId:1 });
   }
 
   handleDemoLoadClick(demoName: string) {

@@ -21,6 +21,8 @@ import java.util.Optional;
 
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Location;
+import org.optaweb.vehiclerouting.domain.Planner;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 
 /**
  * Defines repository operations on locations.
@@ -33,7 +35,7 @@ public interface LocationRepository {
      * @param description description of the location
      * @return a new location
      */
-    Location createLocation(Coordinates coordinates, String description);
+    Location createLocation(Coordinates coordinates,  String description,PlannerEntity planner);
 
     /**
      * Get all locations.

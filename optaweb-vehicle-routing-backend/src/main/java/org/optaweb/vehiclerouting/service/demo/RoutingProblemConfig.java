@@ -53,7 +53,7 @@ class RoutingProblemConfig {
         this.demoProperties = demoProperties;
         this.dataSetMarshaller = dataSetMarshaller;
     }
-
+    /*
     @Bean
     RoutingProblemList routingProblems() {
         ArrayList<RoutingProblem> problems = new ArrayList<>();
@@ -61,14 +61,15 @@ class RoutingProblemConfig {
         problems.addAll(localDataSets());
         return new RoutingProblemList(problems);
     }
-
+    */
+    /*
     private static Reader belgiumReader() {
         return new InputStreamReader(
                 DemoService.class.getResourceAsStream("belgium-cities.yaml"),
                 StandardCharsets.UTF_8
         );
     }
-
+*/
     private static boolean isReadableDir(Path path) {
         File file = path.toFile();
         return file.exists() && file.canRead() && file.isDirectory();

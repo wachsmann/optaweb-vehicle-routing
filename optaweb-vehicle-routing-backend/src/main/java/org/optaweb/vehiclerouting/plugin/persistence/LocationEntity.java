@@ -17,6 +17,7 @@
 package org.optaweb.vehiclerouting.plugin.persistence;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -24,12 +25,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
+
+
 
 /**
  * Persistable location.
  */
 @Entity
-class LocationEntity {
+public class LocationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,8 +46,9 @@ class LocationEntity {
     private BigDecimal latitude;
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
-
     private String description;
+    @ManyToOne(targetEntity=PlannerEntity.class)
+    private PlannerEntity planner;
 
     protected LocationEntity() {
         // for JPA
@@ -52,6 +59,8 @@ class LocationEntity {
         this.latitude = Objects.requireNonNull(latitude);
         this.longitude = Objects.requireNonNull(longitude);
         this.description = Objects.requireNonNull(description);
+        
+        
     }
 
     long getId() {
@@ -66,17 +75,20 @@ class LocationEntity {
         return longitude;
     }
 
+    public PlannerEntity getPlanner() {return this.planner;}
+
+    public void setPlanner(PlannerEntity planner) {this.planner = planner;}
+    
     String getDescription() {
         return description;
     }
-
     @Override
     public String toString() {
         return "LocationEntity{" +
                 "id=" + id +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", description='" + description + '\'' +
+                ", owned by ='" + planner.getUsername() + '\'' +
                 '}';
     }
 }

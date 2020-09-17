@@ -25,10 +25,12 @@ public class VehicleData {
 
     private final String name;
     private final int capacity;
+    private final Planner planner;
 
-    VehicleData(String name, int capacity) {
+    VehicleData(String name, int capacity,Planner planner) {
         this.name = Objects.requireNonNull(name);
         this.capacity = capacity;
+        this.planner = planner;
     }
 
     /**
@@ -46,7 +48,9 @@ public class VehicleData {
     public int capacity() {
         return capacity;
     }
-
+    public Planner planner() {
+        return planner;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

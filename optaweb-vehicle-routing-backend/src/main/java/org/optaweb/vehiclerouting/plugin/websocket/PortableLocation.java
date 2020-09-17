@@ -37,13 +37,16 @@ class PortableLocation {
 
     private final String description;
 
+    private final Long plannerId;
+
     static PortableLocation fromLocation(Location location) {
         Objects.requireNonNull(location, "location must not be null");
         return new PortableLocation(
                 location.id(),
                 location.coordinates().latitude(),
                 location.coordinates().longitude(),
-                location.description()
+                location.description(),
+                location.planner().id()
         );
     }
 
@@ -52,12 +55,14 @@ class PortableLocation {
             @JsonProperty(value = "id") long id,
             @JsonProperty(value = "lat") BigDecimal latitude,
             @JsonProperty(value = "lng") BigDecimal longitude,
-            @JsonProperty(value = "description") String description
+            @JsonProperty(value = "description") String description,
+            @JsonProperty(value = "plannerId") long plannerId
     ) {
         this.id = id;
         this.latitude = Objects.requireNonNull(latitude);
         this.longitude = Objects.requireNonNull(longitude);
         this.description = Objects.requireNonNull(description);
+        this.plannerId = Objects.requireNonNull(plannerId);
     }
 
     public long getId() {
@@ -74,6 +79,10 @@ class PortableLocation {
 
     public String getDescription() {
         return description;
+    }
+
+    public long getPlannerId() {
+        return plannerId;
     }
 
     @Override
@@ -103,6 +112,7 @@ class PortableLocation {
                 ", description='" + description + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", plannerId=" + plannerId +
                 '}';
     }
 }

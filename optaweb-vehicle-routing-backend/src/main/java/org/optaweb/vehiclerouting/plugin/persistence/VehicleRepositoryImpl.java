@@ -21,9 +21,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.optaweb.vehiclerouting.domain.Planner;
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,15 +42,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    public Vehicle createVehicle(int capacity) {
-        long id = repository.save(new VehicleEntity(0, null, capacity)).getId();
-        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(id, "Vehicle " + id, capacity));
+    public Vehicle createVehicle(int capacity, PlannerEntity planner) {
+        final long id = repository.save(new VehicleEntity(0, null, capacity,planner)).getId();
+        final VehicleEntity vehicleEntity = repository.save(new VehicleEntity(id, "Vehicle " + id, capacity,planner));
         return toDomain(vehicleEntity);
     }
 
     @Override
-    public Vehicle createVehicle(VehicleData vehicleData) {
-        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(0, vehicleData.name(), vehicleData.capacity()));
+    public Vehicle createVehicle(final VehicleData vehicleData) {
+        final VehicleEntity vehicleEntity = repository.save(new VehicleEntity(0, vehicleData.name(), vehicleData.capacity(),toEntity(vehicleData.planner())));
         return toDomain(vehicleEntity);
     }
 
@@ -60,13 +62,13 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    public Vehicle removeVehicle(long id) {
-        Optional<VehicleEntity> optionalVehicleEntity = repository.findById(id);
-        VehicleEntity vehicleEntity = optionalVehicleEntity.orElseThrow(
+    public Vehicle removeVehicle(final long id) {
+        final Optional<VehicleEntity> optionalVehicleEntity = repository.findById(id);
+        final VehicleEntity vehicleEntity = optionalVehicleEntity.orElseThrow(
                 () -> new IllegalArgumentException("Vehicle{id=" + id + "} doesn't exist")
         );
         repository.deleteById(id);
-        Vehicle vehicle = toDomain(vehicleEntity);
+        final Vehicle vehicle = toDomain(vehicleEntity);
         logger.info("Deleted {}", vehicle);
         return vehicle;
     }
@@ -77,20 +79,32 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    public Optional<Vehicle> find(long vehicleId) {
+    public Optional<Vehicle> find(final long vehicleId) {
         return repository.findById(vehicleId).map(VehicleRepositoryImpl::toDomain);
     }
 
     @Override
-    public void update(Vehicle vehicle) {
-        repository.save(new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity()));
+    public void update(final Vehicle vehicle) {
+        repository.save(new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity(),toEntity(vehicle.planner())));
     }
 
-    private static Vehicle toDomain(VehicleEntity vehicleEntity) {
+    private static Planner toPlanner(final PlannerEntity planner){return new Planner(planner.getId(), planner.getUsername(),planner.getPassword());}
+    private static PlannerEntity toEntity(final Planner planner){
+        final PlannerEntity plannerEntity = new PlannerEntity(planner.id(),planner.username(),planner.password());
+        plannerEntity.setUsername(planner.username());
+        return plannerEntity;
+    }
+
+    private static Vehicle toDomain(final VehicleEntity vehicleEntity) {
+        
         return VehicleFactory.createVehicle(
                 vehicleEntity.getId(),
                 vehicleEntity.getName(),
-                vehicleEntity.getCapacity()
+                vehicleEntity.getCapacity(),
+                toPlanner(vehicleEntity.getPlanner())
         );
     }
+
+
+  
 }

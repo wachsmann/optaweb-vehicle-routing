@@ -94,7 +94,13 @@
         <artifactId>graphhopper-reader-osm</artifactId>
         <version>0.13.0-pre13</version>
       </dependency>
+       <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.7.0</version>
+    </dependency>
     </dependencies>
+   
   </dependencyManagement>
 
   <build>

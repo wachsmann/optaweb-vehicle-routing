@@ -16,6 +16,7 @@
 
 package org.optaweb.vehiclerouting.plugin.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,11 @@ import java.util.stream.StreamSupport;
 
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Location;
+import org.optaweb.vehiclerouting.domain.Passenger;
+import org.optaweb.vehiclerouting.domain.Planner;
+import org.optaweb.vehiclerouting.plugin.persistence.passenger.PassengerEntity;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerCrudRepository;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 import org.optaweb.vehiclerouting.service.location.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +41,21 @@ class LocationRepositoryImpl implements LocationRepository {
     private static final Logger logger = LoggerFactory.getLogger(LocationRepositoryImpl.class);
     private final LocationCrudRepository repository;
 
+    
     @Autowired
     LocationRepositoryImpl(LocationCrudRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public Location createLocation(Coordinates coordinates, String description) {
+    public Location createLocation(
+        Coordinates coordinates, String description,PlannerEntity planner) {
         LocationEntity locationEntity = repository.save(
-                new LocationEntity(0, coordinates.latitude(), coordinates.longitude(), description)
+                new LocationEntity(0, coordinates.latitude(), coordinates.longitude(),description)
         );
+        logger.info("planner {}", planner.getId());
+        locationEntity.setPlanner(planner);
+        
         Location location = toDomain(locationEntity);
         logger.info("Created {}", location);
         return location;
@@ -78,12 +89,24 @@ class LocationRepositoryImpl implements LocationRepository {
     public Optional<Location> find(long locationId) {
         return repository.findById(locationId).map(LocationRepositoryImpl::toDomain);
     }
-
+   
     private static Location toDomain(LocationEntity locationEntity) {
+        PlannerEntity plEntity = locationEntity.getPlanner();
+        
+        //ogger.info(plEntity.getUsername());
+        Planner planner = new Planner(
+            1,"vhwachsmann@wbp.com","$2a$10$9kgB8YLPE0vCNZkKv1L9ReOmoq6JQlaXprEMr1UGF/4BjvJiN1pte"
+            );
+        
+        
         return new Location(
                 locationEntity.getId(),
                 new Coordinates(locationEntity.getLatitude(), locationEntity.getLongitude()),
-                locationEntity.getDescription()
+                locationEntity.getDescription(),
+                planner
         );
     }
+
+ 
+
 }

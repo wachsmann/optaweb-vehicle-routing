@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.optaweb.vehiclerouting;
+package org.optaweb.vehiclerouting.plugin.persistence.passenger;
 
-public class Profiles {
 
-    public static final String TEST = "test";
-    public static final String NOT_TEST = "!" + TEST;
+import org.springframework.data.repository.CrudRepository;
 
-    private Profiles() {
-        throw new AssertionError("Constants class");
-    }
+/**
+ * Passenger repository.
+ */
+interface PassengerCrudRepository extends CrudRepository<PassengerEntity, Long> {
+    
 }

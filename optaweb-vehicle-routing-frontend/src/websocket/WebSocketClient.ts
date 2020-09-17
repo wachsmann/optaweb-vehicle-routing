@@ -19,7 +19,7 @@ import { MessagePayload } from 'store/message/types';
 import { LatLngWithDescription, RoutingPlan } from 'store/route/types';
 import { ServerInfo } from 'store/server/types';
 import { Client, Frame, over } from 'webstomp-client';
-
+const headerClient = {"Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aHdhY2hzbWFubkB3YnAuY29tIiwiZXhwIjoxNjAwMzIzNjQwLCJpYXQiOjE2MDAzMDU2NDB9.eobDG4FmtiIv4FgN3jlsHKktGbx9muUlu5_leRC_M0VqGLjVZfi6C4MZXH8gkkUa_scIvW5och5eOqMCfbNjnA"}
 export default class WebSocketClient {
   readonly socketUrl: string;
 
@@ -42,8 +42,9 @@ export default class WebSocketClient {
       // (see also https://github.com/JSteunou/webstomp-client/issues/75)
       protocols: ['v12.stomp'],
     });
+    
     this.stompClient.connect(
-      {}, // no headers
+      headerClient, // no headers
       successCallback,
       errorCallback,
     );
@@ -57,7 +58,7 @@ export default class WebSocketClient {
 
   addVehicle() {
     if (this.stompClient) {
-      this.stompClient.send('/app/vehicle');
+      this.stompClient.send('/app/vehicle',JSON.stringify(1));
     }
   }
 
@@ -102,7 +103,7 @@ export default class WebSocketClient {
       this.stompClient.subscribe('/topic/serverInfo', (message) => {
         const serverInfo = JSON.parse(message.body);
         subscriptionCallback(serverInfo);
-      });
+      },headerClient);
     }
   }
 

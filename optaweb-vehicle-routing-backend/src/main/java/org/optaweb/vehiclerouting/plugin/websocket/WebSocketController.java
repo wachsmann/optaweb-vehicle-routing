@@ -16,6 +16,7 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,6 +65,7 @@ class WebSocketController {
             DemoService demoService,
             ApplicationEventPublisher eventPublisher
     ) {
+        logger.info(demoService.toString());
         this.routeListener = routeListener;
         this.regionService = regionService;
         this.locationService = locationService;
@@ -88,11 +90,16 @@ class WebSocketController {
         List<PortableCoordinates> portableBoundingBox = Arrays.asList(
                 PortableCoordinates.fromCoordinates(boundingBox.getSouthWest()),
                 PortableCoordinates.fromCoordinates(boundingBox.getNorthEast()));
-        List<RoutingProblemInfo> demos = demoService.demos().stream()
+                
+        List<RoutingProblemInfo> demos = new ArrayList<RoutingProblemInfo>();
+        
+        /*
+        demoService.demos().stream()
                 .map(routingProblem -> new RoutingProblemInfo(
                         routingProblem.name(),
                         routingProblem.visits().size()))
                 .collect(Collectors.toList());
+        */
         return new ServerInfo(portableBoundingBox, regionService.countryCodes(), demos);
     }
 
@@ -112,9 +119,11 @@ class WebSocketController {
      */
     @MessageMapping("/location")
     void addLocation(PortableLocation request) {
+        
         locationService.createLocation(
                 new Coordinates(request.getLatitude(), request.getLongitude()),
-                request.getDescription()
+                request.getDescription(),
+                1
         );
     }
 
@@ -131,11 +140,12 @@ class WebSocketController {
      * Load a demo data set.
      * @param name data set name
      */
+    /*
     @MessageMapping("/demo/{name}")
     void demo(@DestinationVariable String name) {
         demoService.loadDemo(name);
     }
-
+    */
     @MessageMapping("/clear")
     void clear() {
         // TODO do this in one step (=> new RoutingPlanService)
@@ -144,8 +154,8 @@ class WebSocketController {
     }
 
     @MessageMapping({"vehicle"})
-    void addVehicle() {
-        vehicleService.createVehicle();
+    void addVehicle(long plannerId) {
+        vehicleService.createVehicle(plannerId);
     }
 
     /**

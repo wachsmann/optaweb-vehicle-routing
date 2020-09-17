@@ -135,6 +135,6 @@ public class DataSetMarshaller {
     }
 
     static VehicleData toDomain(DataSetVehicle dataSetVehicle) {
-        return VehicleFactory.vehicleData(dataSetVehicle.name, dataSetVehicle.capacity);
+        return VehicleFactory.vehicleData(dataSetVehicle.name, dataSetVehicle.capacity,null);
     }
 }

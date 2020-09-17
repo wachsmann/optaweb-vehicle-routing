@@ -37,13 +37,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import static org.optaweb.vehiclerouting.Profiles.NOT_TEST;
 
 /**
  * Handles route updates emitted by optimization plugin.
  */
 @Service
-@Profile(NOT_TEST)
 public class RouteListener implements ApplicationListener<RouteChangedEvent> {
 
     private static final Logger logger = LoggerFactory.getLogger(RouteListener.class);

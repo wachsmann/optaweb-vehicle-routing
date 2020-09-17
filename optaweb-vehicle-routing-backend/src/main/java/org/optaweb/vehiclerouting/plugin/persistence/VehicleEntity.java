@@ -20,6 +20,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.optaweb.vehiclerouting.domain.Planner;
+import org.optaweb.vehiclerouting.plugin.persistence.planner.PlannerEntity;
 
 /**
  * Persistable vehicle.
@@ -32,16 +36,20 @@ public class VehicleEntity {
     private long id;
     private String name;
     private int capacity;
-
+    @ManyToOne(targetEntity=PlannerEntity.class)
+    private PlannerEntity planner;
+    
     protected VehicleEntity() {
         // for JPA
     }
 
-    public VehicleEntity(long id, String name, int capacity) {
+    public VehicleEntity(long id, String name, int capacity, PlannerEntity planner) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
+        this.planner = planner;
     }
+
 
     public long getId() {
         return id;
@@ -54,6 +62,9 @@ public class VehicleEntity {
     public int getCapacity() {
         return capacity;
     }
+   
+    public PlannerEntity getPlanner() {return this.planner;}
+    public void setPlanner(PlannerEntity planner) {this.planner = planner;}
 
     @Override
     public String toString() {
