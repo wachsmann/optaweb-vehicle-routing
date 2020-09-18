@@ -36,6 +36,7 @@ class PortableLocation {
     private final BigDecimal longitude;
 
     private final String description;
+    private final int demand;
 
     private final Long plannerId;
 
@@ -46,6 +47,7 @@ class PortableLocation {
                 location.coordinates().latitude(),
                 location.coordinates().longitude(),
                 location.description(),
+                location.demand(),
                 location.planner().id()
         );
     }
@@ -56,12 +58,14 @@ class PortableLocation {
             @JsonProperty(value = "lat") BigDecimal latitude,
             @JsonProperty(value = "lng") BigDecimal longitude,
             @JsonProperty(value = "description") String description,
+            @JsonProperty(value = "demand") int demand,
             @JsonProperty(value = "plannerId") long plannerId
     ) {
         this.id = id;
         this.latitude = Objects.requireNonNull(latitude);
         this.longitude = Objects.requireNonNull(longitude);
         this.description = Objects.requireNonNull(description);
+        this.demand = Objects.requireNonNull(demand);
         this.plannerId = Objects.requireNonNull(plannerId);
     }
 
@@ -80,7 +84,9 @@ class PortableLocation {
     public String getDescription() {
         return description;
     }
-
+    public int getDemand() {
+        return demand;
+    }
     public long getPlannerId() {
         return plannerId;
     }

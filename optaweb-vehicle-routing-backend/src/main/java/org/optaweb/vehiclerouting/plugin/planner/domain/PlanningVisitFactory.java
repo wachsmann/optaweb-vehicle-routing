@@ -21,7 +21,7 @@ package org.optaweb.vehiclerouting.plugin.planner.domain;
  */
 public class PlanningVisitFactory {
 
-    static final int DEFAULT_VISIT_DEMAND = 1;
+    public static final int DEFAULT_VISIT_DEMAND = 1;
 
     private PlanningVisitFactory() {
         throw new AssertionError("Utility class");

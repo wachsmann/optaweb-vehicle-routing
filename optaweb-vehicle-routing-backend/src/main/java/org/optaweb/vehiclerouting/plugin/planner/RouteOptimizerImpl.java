@@ -77,7 +77,8 @@ class RouteOptimizerImpl implements RouteOptimizer {
                 publishSolution();
             }else{
                 logger.info("Planning Visit starting solver...");
-                PlanningVisit visit = PlanningVisitFactory.fromLocation(location);
+                
+                PlanningVisit visit = PlanningVisitFactory.fromLocation(location,domainLocation.demand());
                 visits.add(visit);
                 if (vehicles.isEmpty()) {
                     publishSolution();

@@ -16,7 +16,7 @@
 
 package org.optaweb.vehiclerouting.domain;
 
-import java.util.List;
+
 
 /**
  * A unique location significant to the user.
@@ -26,11 +26,13 @@ public class Location extends LocationData {
     private final long id;
 
     private final Planner planner;
+    private final int demand;
 
-    public Location(long id, Coordinates coordinates, String description,Planner planner) {
+    public Location(long id, Coordinates coordinates, String description,int demand,Planner planner) {
         super(coordinates,description);
         this.id = id;
         this.planner = planner;
+        this.demand = demand;
     }
 
     /**
@@ -39,6 +41,13 @@ public class Location extends LocationData {
      */
     public long id() {
         return id;
+    }
+    /**
+     * Location's demand.
+     * @return unique ID
+     */
+    public int demand() {
+        return demand;
     }
     /**
      * Planner's ID.

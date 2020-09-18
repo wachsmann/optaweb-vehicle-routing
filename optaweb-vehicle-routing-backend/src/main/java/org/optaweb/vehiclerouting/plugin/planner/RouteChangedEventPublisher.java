@@ -68,6 +68,11 @@ class RouteChangedEventPublisher {
 
            logger.info(vehicle.toString()); 
         }
+         
+        for (PlanningVisit v : solution.getVisitList()) {
+
+           logger.info(v.toString()); 
+        }
         logger.debug("Routes: {}", event.routes());
         eventPublisher.publishEvent(event);
     }

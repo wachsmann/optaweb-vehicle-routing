@@ -1,16 +1,12 @@
 package org.optaweb.vehiclerouting.plugin.persistence.config;
-import java.io.IOException;
+
 import java.util.List;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.optaweb.vehiclerouting.plugin.persistence.planner.JwtPlannerDetailsService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -21,16 +17,11 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+
+
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import io.jsonwebtoken.ExpiredJwtException;
 
 
 
@@ -41,11 +32,12 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class JwtRequestFilter /*extends OncePerRequestFilter*/ implements WebSocketMessageBrokerConfigurer {
+    /*
     @Autowired
     private JwtPlannerDetailsService jwtUserDetailsService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    
+    */
     private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -66,7 +58,7 @@ public class JwtRequestFilter /*extends OncePerRequestFilter*/ implements WebSoc
 
                             logger.debug("X-Authorization: {}", authorization);
 
-                            String accessToken = authorization.get(0).split(" ")[1];
+                            //String accessToken = authorization.get(0).split(" ")[1];
                             /*
                             Jwt jwt = jwtDecoder.decode(accessToken);
 

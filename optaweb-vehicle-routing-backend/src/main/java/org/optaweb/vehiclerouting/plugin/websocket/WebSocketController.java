@@ -123,6 +123,7 @@ class WebSocketController {
         locationService.createLocation(
                 new Coordinates(request.getLatitude(), request.getLongitude()),
                 request.getDescription(),
+                request.getDemand(),
                 1
         );
     }

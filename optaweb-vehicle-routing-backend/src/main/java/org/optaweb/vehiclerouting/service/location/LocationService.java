@@ -62,7 +62,8 @@ public class LocationService {
         this.eventPublisher = eventPublisher;
     }
 
-    public synchronized boolean createLocation(Coordinates coordinates, String description,long plannerId) {
+    public synchronized boolean createLocation(Coordinates coordinates, String description,int demand,long plannerId) {
+        
         final Optional<PlannerEntity> optionalPlannerEntity = plannerRepository.findById(plannerId);
         final PlannerEntity plannerEntity = optionalPlannerEntity.orElseThrow(
                 () -> new IllegalArgumentException("Planner{id=" + plannerId + "} doesn't exist")
@@ -71,9 +72,10 @@ public class LocationService {
         Objects.requireNonNull(coordinates);
         Objects.requireNonNull(description);
         Objects.requireNonNull(plannerId);
+        Objects.requireNonNull(demand);
         
         // TODO if (router.isLocationAvailable(coordinates))
-        return submitToPlanner(repository.createLocation(coordinates,description,plannerEntity));
+        return submitToPlanner(repository.createLocation(coordinates,description,demand,plannerEntity));
     }
 
     public synchronized boolean addLocation(Location location) {

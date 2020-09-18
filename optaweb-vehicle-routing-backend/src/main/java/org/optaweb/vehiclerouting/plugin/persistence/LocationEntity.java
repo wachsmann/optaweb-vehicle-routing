@@ -47,6 +47,7 @@ public class LocationEntity {
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
     private String description;
+    private int demand;
     @ManyToOne(targetEntity=PlannerEntity.class)
     private PlannerEntity planner;
 
@@ -54,11 +55,12 @@ public class LocationEntity {
         // for JPA
     }
 
-    LocationEntity(long id, BigDecimal latitude, BigDecimal longitude, String description) {
+    LocationEntity(long id, BigDecimal latitude, BigDecimal longitude, String description,int demand) {
         this.id = id;
         this.latitude = Objects.requireNonNull(latitude);
         this.longitude = Objects.requireNonNull(longitude);
         this.description = Objects.requireNonNull(description);
+        this.demand = Objects.requireNonNull(demand);
         
         
     }
@@ -82,12 +84,16 @@ public class LocationEntity {
     String getDescription() {
         return description;
     }
+    int getDemand() {
+        return demand;
+    }
     @Override
     public String toString() {
         return "LocationEntity{" +
                 "id=" + id +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", demand=" + demand +
                 ", owned by ='" + planner.getUsername() + '\'' +
                 '}';
     }

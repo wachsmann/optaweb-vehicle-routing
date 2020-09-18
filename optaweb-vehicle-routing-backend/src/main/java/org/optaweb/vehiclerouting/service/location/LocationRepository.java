@@ -35,7 +35,7 @@ public interface LocationRepository {
      * @param description description of the location
      * @return a new location
      */
-    Location createLocation(Coordinates coordinates,  String description,PlannerEntity planner);
+    Location createLocation(Coordinates coordinates,  String description,int demand,PlannerEntity planner);
 
     /**
      * Get all locations.

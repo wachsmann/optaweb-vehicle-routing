@@ -81,9 +81,9 @@ public class DemoService {
         routingProblem.vehicles().forEach(vehicleService::createVehicle);
     }
 */
-    private void addWithRetry(Coordinates coordinates, String description) {
+    private void addWithRetry(Coordinates coordinates, String description,int demand,long plannerId) {
         int tries = 0;
-        while (tries < MAX_TRIES && !locationService.createLocation(coordinates, description,0)) {
+        while (tries < MAX_TRIES && !locationService.createLocation(coordinates, description,demand,plannerId)) {
             tries++;
         }
         if (tries == MAX_TRIES) {
